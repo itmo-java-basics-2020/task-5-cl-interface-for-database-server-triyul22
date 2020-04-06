@@ -2,6 +2,11 @@ package ru.andrey.kvstorage;
 
 import ru.andrey.kvstorage.console.DatabaseCommandResult;
 import ru.andrey.kvstorage.console.ExecutionEnvironment;
+import ru.andrey.kvstorage.exception.DatabaseException;
+import ru.andrey.kvstorage.logic.Database;
+import ru.andrey.kvstorage.logic.DatabaseCommands;
+
+import java.util.Optional;
 
 public class DatabaseServer {
 
@@ -12,10 +17,16 @@ public class DatabaseServer {
     }
 
     public static void main(String[] args) {
-
     }
 
     DatabaseCommandResult executeNextCommand(String commandText) {
-        throw new UnsupportedOperationException();
+        if (commandText==null){
+            return  new DatabaseCommandResult.DatabaseCommandResultInnerClass(false, "Command Text is not given");
+        }
+        try {
+            return DatabaseCommands.commandRun(commandText, env);
+        } catch (DatabaseException | IllegalArgumentException e) {
+            return new DatabaseCommandResult.DatabaseCommandResultInnerClass(false, e.getMessage());
+        }
     }
 }
