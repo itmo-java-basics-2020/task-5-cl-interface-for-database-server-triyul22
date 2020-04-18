@@ -6,9 +6,9 @@ import ru.andrey.kvstorage.logic.Database;
 import java.util.Optional;
 
 public class CreateTableCommand implements DatabaseCommand {
-    ExecutionEnvironment env;
-    String databaseName;
-    String tableName;
+    private ExecutionEnvironment env;
+    private String databaseName;
+    private String tableName;
 
     public CreateTableCommand(String dbName, String tableName, ExecutionEnvironment env) {
         this.databaseName = dbName;
@@ -23,11 +23,11 @@ public class CreateTableCommand implements DatabaseCommand {
             if (db.isPresent()) {
                 Database dbValue = db.get();
                 dbValue.createTableIfNotExists(tableName);
-                return new DatabaseCommandResult.DatabaseCommandResultInnerClass(true, null);
+                return DatabaseCommand.success();
             }
-            return new DatabaseCommandResult.DatabaseCommandResultInnerClass(false, "This Database does not exists!");
+            return DatabaseCommand.fail("This Database does not exists!");
         } catch (DatabaseException e) {
-            return new DatabaseCommandResult.DatabaseCommandResultInnerClass(false, e.getMessage());
+            return DatabaseCommand.fail(e.getMessage());
         }
     }
 }

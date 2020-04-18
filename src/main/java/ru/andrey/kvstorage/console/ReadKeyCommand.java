@@ -20,19 +20,21 @@ public class ReadKeyCommand implements DatabaseCommand {
 
     @Override
     public DatabaseCommandResult execute() throws DatabaseException {
+        String errorMessage;
         if (env == null || dbName == null || tableName == null || key == null) {
-            return new DatabaseCommandResult.DatabaseCommandResultInnerClass(false, "Some arguments where not given");
+            return DatabaseCommand.fail("Some arguments were not given!");
         }
         try {
             Optional<Database> db = env.getDatabase(dbName);
             if (db.isPresent()) {
                 Database dbValue = db.get();
                 dbValue.read(tableName, key);
-                return new DatabaseCommandResult.DatabaseCommandResultInnerClass(true, null);
+                return DatabaseCommand.success();
+            } else {
+                return DatabaseCommand.fail("This Database does not exists!");
             }
-            return new DatabaseCommandResult.DatabaseCommandResultInnerClass(false, "This Database does not exists!");
-        } catch (DatabaseException e) {
-            return new DatabaseCommandResult.DatabaseCommandResultInnerClass(false, e.getMessage());
+        } catch (DatabaseException | NullPointerException e) {
+            return DatabaseCommand.fail(e.getMessage());
         }
     }
 }

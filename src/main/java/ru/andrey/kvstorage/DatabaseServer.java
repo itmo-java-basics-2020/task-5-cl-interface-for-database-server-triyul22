@@ -20,13 +20,13 @@ public class DatabaseServer {
     }
 
     DatabaseCommandResult executeNextCommand(String commandText) {
-        if (commandText==null){
-            return  new DatabaseCommandResult.DatabaseCommandResultInnerClass(false, "Command Text is not given");
+        if (commandText == null) {
+            return new DatabaseCommandResult.DatabaseCommandResultImpl(false, "Command Text is not given");
         }
         try {
             return DatabaseCommands.commandRun(commandText, env);
         } catch (DatabaseException | IllegalArgumentException e) {
-            return new DatabaseCommandResult.DatabaseCommandResultInnerClass(false, e.getMessage());
+            return e.getMessage() == null ? new DatabaseCommandResult.DatabaseCommandResultImpl(false, "Command failed without error message.") : new DatabaseCommandResult.DatabaseCommandResultImpl(false, e.getMessage());
         }
     }
 }

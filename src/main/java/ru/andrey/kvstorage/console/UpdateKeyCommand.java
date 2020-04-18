@@ -23,18 +23,18 @@ public class UpdateKeyCommand implements DatabaseCommand {
     @Override
     public DatabaseCommandResult execute() {
         if (env == null || dbName == null || tableName == null || key == null || value == null) {
-            return new DatabaseCommandResult.DatabaseCommandResultInnerClass(false, "Some arguments where not given");
+            return DatabaseCommand.fail("Some arguments where not given");
         }
         try {
             Optional<Database> db = env.getDatabase(dbName);
             if (db.isPresent()) {
                 Database dbValue = db.get();
                 dbValue.write(tableName, key, value);
-                return new DatabaseCommandResult.DatabaseCommandResultInnerClass(true, null);
+                return DatabaseCommand.success();
             }
-            return new DatabaseCommandResult.DatabaseCommandResultInnerClass(false, "Database does not exists");
+            return DatabaseCommand.fail("Database does not exists");
         } catch (DatabaseException | NullPointerException e) {
-            return new DatabaseCommandResult.DatabaseCommandResultInnerClass(false, e.getMessage());
+            return DatabaseCommand.fail(e.getMessage());
         }
     }
 }

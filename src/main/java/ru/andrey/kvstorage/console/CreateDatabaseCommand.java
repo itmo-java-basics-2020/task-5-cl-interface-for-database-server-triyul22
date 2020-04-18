@@ -17,8 +17,8 @@ public class CreateDatabaseCommand implements DatabaseCommand {
     public DatabaseCommandResult execute() {
         Database db = new DatabaseClass(env, dbName);
         if (env == null || dbName == null) {
-            return new DatabaseCommandResult.DatabaseCommandResultInnerClass(false, "No given arguments");
+            return DatabaseCommand.fail("No given arguments");
         }
-        return new DatabaseCommandResult.DatabaseCommandResultInnerClass(true, null);
+        return DatabaseCommand.success();
     }
 }

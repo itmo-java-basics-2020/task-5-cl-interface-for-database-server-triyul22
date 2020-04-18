@@ -15,11 +15,12 @@ public interface DatabaseCommandResult {
         SUCCESS, FAILED
     }
 
-    class DatabaseCommandResultInnerClass implements DatabaseCommandResult {
+    class DatabaseCommandResultImpl implements DatabaseCommandResult {
         private boolean success;
         private String errorMessage;
+        private Optional<String> result;
 
-        public DatabaseCommandResultInnerClass(boolean success, String errorMessage) {
+        public DatabaseCommandResultImpl(boolean success, String errorMessage) {
             this.success = success;
             this.errorMessage = errorMessage;
         }
@@ -28,19 +29,16 @@ public interface DatabaseCommandResult {
         public Optional<String> getResult() {
             switch (getStatus()) {
                 case SUCCESS:
-                    return Optional.of("Command successfully executed!");
+                    result = Optional.empty();
                 case FAILED:
-                    return Optional.of("Execution of the command has failed." + getErrorMessage());
+                    result = Optional.ofNullable(errorMessage);
             }
-            return Optional.empty();
+            return result;
         }
 
         @Override
         public DatabaseCommandStatus getStatus() {
-            if (isSuccess()) {
-                return DatabaseCommandStatus.SUCCESS;
-            }
-            return DatabaseCommandStatus.FAILED;
+            return isSuccess() ? DatabaseCommandStatus.SUCCESS : DatabaseCommandStatus.FAILED;
         }
 
         @Override
@@ -53,5 +51,4 @@ public interface DatabaseCommandResult {
             return errorMessage;
         }
     }
-
 }
