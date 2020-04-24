@@ -27,7 +27,7 @@ public class CreateTableCommand implements DatabaseCommand {
             }
             return DatabaseCommand.fail("This Database does not exists!");
         } catch (DatabaseException e) {
-            return DatabaseCommand.fail(e.getMessage());
+            return e.getMessage() == null ? DatabaseCommand.fail("Command failed without error message.") : DatabaseCommand.fail(e.getMessage());
         }
     }
 }

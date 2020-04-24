@@ -20,7 +20,6 @@ public class ReadKeyCommand implements DatabaseCommand {
 
     @Override
     public DatabaseCommandResult execute() throws DatabaseException {
-        String errorMessage;
         if (env == null || dbName == null || tableName == null || key == null) {
             return DatabaseCommand.fail("Some arguments were not given!");
         }
@@ -34,7 +33,7 @@ public class ReadKeyCommand implements DatabaseCommand {
                 return DatabaseCommand.fail("This Database does not exists!");
             }
         } catch (DatabaseException | NullPointerException e) {
-            return DatabaseCommand.fail(e.getMessage());
+            return e.getMessage() == null ? DatabaseCommand.fail("Command failed without error message.") : DatabaseCommand.fail(e.getMessage());
         }
     }
 }

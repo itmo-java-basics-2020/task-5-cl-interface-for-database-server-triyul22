@@ -34,7 +34,7 @@ public class UpdateKeyCommand implements DatabaseCommand {
             }
             return DatabaseCommand.fail("Database does not exists");
         } catch (DatabaseException | NullPointerException e) {
-            return DatabaseCommand.fail(e.getMessage());
+            return e.getMessage() == null ? DatabaseCommand.fail("Command failed without error message.") : DatabaseCommand.fail(e.getMessage());
         }
     }
 }

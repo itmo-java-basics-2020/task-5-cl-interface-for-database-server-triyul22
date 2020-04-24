@@ -29,7 +29,7 @@ public interface DatabaseCommandResult {
         public Optional<String> getResult() {
             switch (getStatus()) {
                 case SUCCESS:
-                    result = Optional.empty();
+                    result = Optional.of("Successfully executed!");
                 case FAILED:
                     result = Optional.ofNullable(errorMessage);
             }
